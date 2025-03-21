@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Home Remedies Finder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Indian Home Remedies Finder</h1>
+            <p>Find traditional solutions for common health issues</p>
+        </header>
+
+        <div class="search-form">
+            <div class="form-group">
+                <label for="health-issue">Select Health Issue:</label>
+                <select id="health-issue">
+                    <option value="">-- Select a health issue --</option>
+                    <option value="cold">Common Cold</option>
+                    <option value="cough">Cough</option>
+                    <option value="fever">Fever</option>
+                    <option value="headache">Headache</option>
+                    <option value="stomachache">Stomach Ache</option>
+                    <option value="indigestion">Indigestion</option>
+                    <option value="constipation">Constipation</option>
+                    <option value="diarrhea">Diarrhea</option>
+                    <option value="sore-throat">Sore Throat</option>
+                    <option value="allergies">Allergies</option>
+                    <option value="skin-issues">Skin Issues</option>
+                    <option value="joint-pain">Joint Pain</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="symptoms-container" style="display: none;">
+                <label for="symptoms">Select Symptoms:</label>
+                <select id="symptoms">
+                    <option value="">-- Select symptoms --</option>
+                    <!-- Will be populated dynamically -->
+                </select>
+            </div>
+
+            <button id="search-btn">Find Home Remedies</button>
+        </div>
+
+        <div id="loading" class="loading">
+            <p>Searching for traditional remedies...</p>
+            <div class="spinner"></div>
+        </div>
+
+        <div id="results" class="results">
+            <h2>Recommended Home Remedies</h2>
+            <div id="remedies-container">
+                <!-- Remedy cards will appear here -->
+            </div>
+        </div>
+
+        <div class="disclaimer">
+            <h3>Important Disclaimer</h3>
+            <p>These remedies are based on traditional knowledge and not meant to replace professional medical advice. Please consult with a healthcare provider for serious or persistent health issues.</p>
+        </div>
+
+        <footer>
+            <p>Traditional Indian Home Remedies | Based on ancient Ayurvedic and folk wisdom</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
