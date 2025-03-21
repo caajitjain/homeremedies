@@ -4,13 +4,149 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Indian Home Remedies Finder</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="logo.png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f8f3;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e1e1e1;
+        }
+        
+        .logo {
+            max-width: 150px;
+            margin-bottom: 15px;
+        }
+        
+        header h1 {
+            color: #3e6b35;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        header p {
+            color: #666;
+            font-style: italic;
+        }
+        
+        .search-form {
+            background-color: #f0f7eb;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #3e6b35;
+        }
+        
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cde0c9;
+            border-radius: 6px;
+            background-color: white;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        select:focus {
+            border-color: #3e6b35;
+            outline: none;
+        }
+        
+        button {
+            background-color: #3e6b35;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2d5026;
+        }
+        
+        .disclaimer {
+            background-color: #fff9e6;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #f6c453;
+        }
+        
+        .disclaimer h3 {
+            color: #946c00;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .disclaimer p {
+            color: #6d5214;
+            font-size: 14px;
+        }
+        
+        footer {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e1e1;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            header h1 {
+                font-size: 24px;
+            }
+            
+            .search-form {
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <img src="logo.png" alt="Indian Home Remedies Logo" class="logo">
             <h1>Indian Home Remedies Finder</h1>
             <p>Find traditional solutions for common health issues</p>
         </header>
@@ -46,18 +182,6 @@
             <button id="search-btn">Find Home Remedies</button>
         </div>
 
-        <div id="loading" class="loading">
-            <p>Searching for traditional remedies...</p>
-            <div class="spinner"></div>
-        </div>
-
-        <div id="results" class="results">
-            <h2>Recommended Home Remedies</h2>
-            <div id="remedies-container">
-                <!-- Remedy cards will appear here -->
-            </div>
-        </div>
-
         <div class="disclaimer">
             <h3>Important Disclaimer</h3>
             <p>These remedies are based on traditional knowledge and not meant to replace professional medical advice. Please consult with a healthcare provider for serious or persistent health issues.</p>
@@ -68,6 +192,169 @@
         </footer>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // Get DOM elements
+        const healthIssueSelect = document.getElementById('health-issue');
+        const symptomsContainer = document.getElementById('symptoms-container');
+        const symptomsSelect = document.getElementById('symptoms');
+        const searchBtn = document.getElementById('search-btn');
+
+        // Define symptoms for each health issue
+        const symptomsMap = {
+            'cold': [
+                'Runny nose',
+                'Nasal congestion',
+                'Sneezing',
+                'Sore throat',
+                'Mild cough',
+                'Mild body aches'
+            ],
+            'cough': [
+                'Dry cough',
+                'Wet cough',
+                'Chest congestion',
+                'Throat irritation',
+                'Nighttime cough'
+            ],
+            'fever': [
+                'High temperature',
+                'Chills and shivering',
+                'Headache',
+                'Body aches',
+                'Weakness'
+            ],
+            'headache': [
+                'Tension headache',
+                'Migraine',
+                'Sinus headache',
+                'Stress-related headache'
+            ],
+            'stomachache': [
+                'General stomach pain',
+                'Gas and bloating',
+                'Acidity',
+                'Nausea'
+            ],
+            'indigestion': [
+                'Bloating',
+                'Gas',
+                'Acidity',
+                'Heartburn',
+                'Nausea after eating'
+            ],
+            'constipation': [
+                'Difficult bowel movements',
+                'Infrequent bowel movements',
+                'Hard stools',
+                'Feeling of incomplete evacuation'
+            ],
+            'diarrhea': [
+                'Loose watery stools',
+                'Abdominal cramps',
+                'Urgent bowel movements',
+                'Nausea'
+            ],
+            'sore-throat': [
+                'Throat pain',
+                'Difficulty swallowing',
+                'Scratchy sensation in throat',
+                'Throat inflammation'
+            ],
+            'allergies': [
+                'Sneezing',
+                'Itchy eyes',
+                'Runny nose',
+                'Skin rash',
+                'Seasonal allergies'
+            ],
+            'skin-issues': [
+                'Acne',
+                'Dry skin',
+                'Minor burns',
+                'Rashes',
+                'Itching'
+            ],
+            'joint-pain': [
+                'Arthritis pain',
+                'Joint stiffness',
+                'Swelling in joints',
+                'Muscle aches',
+                'Inflammation'
+            ]
+        };
+
+        // Named symptom mapping for better search terms
+        const healthIssueNames = {
+            'cold': 'common cold',
+            'cough': 'cough',
+            'fever': 'fever',
+            'headache': 'headache',
+            'stomachache': 'stomach ache',
+            'indigestion': 'indigestion',
+            'constipation': 'constipation',
+            'diarrhea': 'diarrhea',
+            'sore-throat': 'sore throat',
+            'allergies': 'allergies',
+            'skin-issues': 'skin problems',
+            'joint-pain': 'joint pain'
+        };
+
+        // Event listeners
+        healthIssueSelect.addEventListener('change', updateSymptoms);
+        searchBtn.addEventListener('click', searchRemedies);
+
+        // Function to update symptoms dropdown based on health issue selection
+        function updateSymptoms() {
+            const selectedIssue = healthIssueSelect.value;
+            
+            if (selectedIssue) {
+                // Clear previous options except the first default one
+                symptomsSelect.innerHTML = '<option value="">-- Select symptoms --</option>';
+                
+                // Add symptoms for selected health issue
+                if (symptomsMap[selectedIssue]) {
+                    symptomsMap[selectedIssue].forEach(symptom => {
+                        const option = document.createElement('option');
+                        option.value = symptom;
+                        option.textContent = symptom;
+                        symptomsSelect.appendChild(option);
+                    });
+                }
+                
+                // Show symptoms dropdown
+                symptomsContainer.style.display = 'block';
+            } else {
+                // Hide symptoms dropdown if no health issue selected
+                symptomsContainer.style.display = 'none';
+            }
+        }
+
+        // Function to search for remedies
+        function searchRemedies() {
+            const healthIssue = healthIssueSelect.value;
+            const symptom = symptomsSelect.value;
+            
+            // Validate inputs
+            if (!healthIssue) {
+                alert('Please select a health issue');
+                return;
+            }
+            
+            if (!symptom) {
+                alert('Please select a symptom');
+                return;
+            }
+            
+            // Get proper health issue name
+            const healthIssueName = healthIssueNames[healthIssue] || healthIssue;
+            
+            // Create the search query
+            const searchQuery = `traditional Indian home remedies for ${symptom.toLowerCase()} in ${healthIssueName}`;
+            
+            // Open Google search in a new tab
+            const googleUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
+            window.open(googleUrl, '_blank');
+        }
+    </script>
 </body>
 </html>
